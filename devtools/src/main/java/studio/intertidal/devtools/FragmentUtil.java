@@ -1,5 +1,6 @@
 package studio.intertidal.devtools;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.inputmethod.InputMethodManager;
@@ -47,9 +48,18 @@ public class FragmentUtil {
      * @param fragment 目前開啟的Fragment
      */
     public static void closeKeyboard(Fragment fragment) {
+        closeKeyboard(fragment.getActivity());
+    }
+
+    /**
+     * 從Fragment關閉鍵盤
+     *
+     * @param activity Activity
+     */
+    public static void closeKeyboard(Activity activity) {
         try {
-            InputMethodManager imm = (InputMethodManager) fragment.getActivity().getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(fragment.getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         } catch (Exception e) {
             e.printStackTrace();
         }
