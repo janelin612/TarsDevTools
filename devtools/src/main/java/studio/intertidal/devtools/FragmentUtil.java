@@ -64,4 +64,15 @@ public class FragmentUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 退回到剩下最原始的第一個Fragment
+     *
+     * @param manager Activity持有的FragmentManager
+     */
+    public static void popBackToTop(FragmentManager manager) {
+        for (int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+            manager.popBackStack();
+        }
+    }
 }
