@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.inputmethod.InputMethodManager;
 
-import java.util.List;
-
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class FragmentUtil {
@@ -21,8 +19,8 @@ public class FragmentUtil {
         if (manager == null) return null;
 
         try {
-            List<Fragment> list = manager.getFragments();
-            return list.get(list.size() - 1);
+            int pointer = manager.getBackStackEntryCount();
+            return manager.getFragments().get(pointer);
         } catch (Exception e) {
             return null;
         }
