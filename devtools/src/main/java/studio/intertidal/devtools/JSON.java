@@ -100,6 +100,26 @@ public class JSON {
     }
 
     /**
+     * 取出JSONArray
+     *
+     * @param father     要取值的JSONObject
+     * @param key        要取值的key
+     * @param returnNull 若傳入true 則遇到錯誤會回傳null，false的話會建立一個長度為0的空array
+     * @return 成功時回傳取到的值 失敗回傳defaultValue傳入的東西
+     */
+    public static JSONArray getArray(JSONObject father, String key, boolean returnNull) {
+        try {
+            return father.getJSONArray(key);
+        } catch (JSONException e) {
+            if (returnNull) {
+                return null;
+            } else {
+                return new JSONArray();
+            }
+        }
+    }
+
+    /**
      * <p>從一個JSONArray裡面找到第一個包含指定key-value的物件並回傳</p>
      * 例如有個陣列[{"name":"a"},{"name":"b"}]<br/>
      * 那呼叫findSpecifiedInArray(array,"name","b")<br/>
