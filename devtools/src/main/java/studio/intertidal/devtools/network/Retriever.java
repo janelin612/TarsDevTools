@@ -123,6 +123,8 @@ public class Retriever {
                 Log.d(LOG_TAG, "│ RegqBody: " + buffer.readUtf8());
             } catch (IOException e) {
                 Log.e(LOG_TAG, "│ Error: build request body fail :( " + e.toString());
+            } catch (NullPointerException e) {
+                Log.d(LOG_TAG, "│ RegqBody: empty");
             }
             Log.d(LOG_TAG, "├────────────────────────────────────────────────────────────────────");
             buffer.close();
