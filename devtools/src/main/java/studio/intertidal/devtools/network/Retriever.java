@@ -14,6 +14,7 @@ import okio.Buffer;
 
 
 public class Retriever {
+    private static final String LOG_TAG = "Retriever";
     private static boolean isDebugMode = false;
     private static OkHttpClient client;
 
@@ -57,10 +58,8 @@ public class Retriever {
     }
 
     private static class OkHttpAsyncTask extends AsyncTask<Object, Object, OkHttpAsyncTask.Result> {
-        private static final String LOG_TAG = "Retriever";
         private Request request;
         private long startTime;
-
 
         private Callback callback = null;
         /**
