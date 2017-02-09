@@ -1,6 +1,7 @@
 package studio.intertidal.devtools.network;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -48,7 +49,10 @@ public class Retriever {
      * @param request  要發送的Request
      * @param callback 實作callback
      */
-    public static void call(Request request, Callback callback) {
+    public static void call(Request request, @Nullable Callback callback) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request can not be null");
+        }
         new OkHttpAsyncTask(callback, request).execute();
     }
 
