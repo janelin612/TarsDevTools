@@ -56,34 +56,18 @@ public class Retriever {
         new OkHttpAsyncTask(callback, request).execute();
     }
 
-    /**
-     * 封裝OkHttp連線的方法
-     *
-     * @param request  要發送的Request
-     * @param callback 實作callback
-     */
-    public static void callWasteTime(Request request, @Nullable WasteTimeCallback callback) {
-        if (request == null) {
-            throw new IllegalArgumentException("Request can not be null");
-        }
-        new OkHttpAsyncTask(callback, request).execute();
-    }
-
     private static class OkHttpAsyncTask extends AsyncTask<Object, Object, OkHttpAsyncTask.Result> {
         private static final String LOG_TAG = "Retriever";
         private Request request;
         private long startTime;
 
-        private WasteTimeCallback wasteTimeCallback = null;
+
         private Callback callback = null;
         /**
          * 紀錄{@link #callback}是否存在
          */
         private boolean isCallbackExist = false;
-        /**
-         * 紀錄{@link #wasteTimeCallback}是否存在
-         */
-        private boolean isWasteTimeCallbackExist = false;
+
 
         /**
          * @param callback callback interface
@@ -97,18 +81,6 @@ public class Retriever {
             this.request = request;
         }
 
-        /**
-         * @param callback callback interface
-         * @param request  request object
-         */
-        OkHttpAsyncTask(@Nullable WasteTimeCallback callback, Request request) {
-            if (wasteTimeCallback != null) {
-                this.wasteTimeCallback = callback;
-                this.isWasteTimeCallbackExist = true;
-            }
-            this.request = request;
-        }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -117,7 +89,6 @@ public class Retriever {
                 printRequestDebugLog();
             }
             if (isCallbackExist) callback.onRetrieverStart();
-            if (isWasteTimeCallbackExist) wasteTimeCallback.onRetrieverStart();
         }
 
         @Override
@@ -125,9 +96,6 @@ public class Retriever {
             Response response = null;
             try {
                 response = getClientInstance().newCall(request).execute();
-                if (isWasteTimeCallbackExist) {
-                    wasteTimeCallback.onResponseInBackground(response);
-                }
                 Result result = new Result();
                 result.status = response.code();
                 result.body = response.body().string();
@@ -135,7 +103,7 @@ public class Retriever {
             } catch (IOException e) {
                 return null;
             } finally {
-                if (!isWasteTimeCallbackExist && response != null) {
+                if (response != null) {
                     response.close();
                 }
             }
@@ -149,13 +117,11 @@ public class Retriever {
                     printResponseErrorLog("Response is null");
                 }
                 if (isCallbackExist) callback.onRetrieverError();
-                if (isWasteTimeCallbackExist) wasteTimeCallback.onRetrieverError();
             } else {
                 if (isDebugMode) {
                     printResponseDebugLog(result);
                 }
                 if (isCallbackExist) callback.onRetrieverFinish(result.status, result.body);
-                if (isWasteTimeCallbackExist) wasteTimeCallback.onRetrieverFinish();
             }
         }
 
