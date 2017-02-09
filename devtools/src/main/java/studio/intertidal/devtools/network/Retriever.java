@@ -62,7 +62,7 @@ public class Retriever {
      * @param request  要發送的Request
      * @param callback 實作callback
      */
-    public static void call(Request request, WasteTimeCallback callback) {
+    public static void callWasteTime(Request request, @Nullable WasteTimeCallback callback) {
         if (request == null) {
             throw new IllegalArgumentException("Request can not be null");
         }
