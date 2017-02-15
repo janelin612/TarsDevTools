@@ -1,5 +1,10 @@
 package studio.intertidal.devtools.network;
 
+/**
+ * <p>簡單Callback</p>
+ * <p>配合{@link android.os.AsyncTask}的生命週期設計
+ * 適用於大多數情況</p>
+ */
 public interface Callback {
     /**
      * 對應到AsyncTask的onPreExecute()

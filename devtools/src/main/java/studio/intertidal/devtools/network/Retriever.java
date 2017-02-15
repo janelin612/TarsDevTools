@@ -1,6 +1,7 @@
 package studio.intertidal.devtools.network;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import okio.Buffer;
 
 
 public class Retriever {
+    private static final String LOG_TAG = "Retriever";
     private static boolean isDebugMode = false;
     private static OkHttpClient client;
 
@@ -48,22 +50,33 @@ public class Retriever {
      * @param request  要發送的Request
      * @param callback 實作callback
      */
-    public static void call(Request request, Callback callback) {
+    public static void call(Request request, @Nullable Callback callback) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request can not be null");
+        }
         new OkHttpAsyncTask(callback, request).execute();
     }
 
     private static class OkHttpAsyncTask extends AsyncTask<Object, Object, OkHttpAsyncTask.Result> {
-        private static final String LOG_TAG = "Retriever";
-        private Callback callback;
         private Request request;
         private long startTime;
+
+        private Callback callback = null;
+        /**
+         * 紀錄{@link #callback}是否存在
+         */
+        private boolean isCallbackExist = false;
+
 
         /**
          * @param callback callback interface
          * @param request  request object
          */
-        OkHttpAsyncTask(Callback callback, Request request) {
-            this.callback = callback;
+        OkHttpAsyncTask(@Nullable Callback callback, Request request) {
+            if (callback != null) {
+                this.callback = callback;
+                this.isCallbackExist = true;
+            }
             this.request = request;
         }
 
@@ -74,7 +87,7 @@ public class Retriever {
                 startTime = Calendar.getInstance().getTimeInMillis();
                 printRequestDebugLog();
             }
-            if (callback != null) callback.onRetrieverStart();
+            if (isCallbackExist) callback.onRetrieverStart();
         }
 
         @Override
@@ -102,12 +115,12 @@ public class Retriever {
                 if (isDebugMode) {
                     printResponseErrorLog("Response is null");
                 }
-                if (callback != null) callback.onRetrieverError();
+                if (isCallbackExist) callback.onRetrieverError();
             } else {
                 if (isDebugMode) {
                     printResponseDebugLog(result);
                 }
-                if (callback != null) callback.onRetrieverFinish(result.status, result.body);
+                if (isCallbackExist) callback.onRetrieverFinish(result.status, result.body);
             }
         }
 
