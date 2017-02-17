@@ -120,7 +120,13 @@ public class Retriever {
                 if (isDebugMode) {
                     printResponseDebugLog(result);
                 }
-                if (isCallbackExist) callback.onRetrieverFinish(result.status, result.body);
+                if (isCallbackExist) {
+                    try {
+                        callback.onRetrieverFinish(result.status, result.body);
+                    } catch (IllegalStateException e) {
+                        Log.w(LOG_TAG, e.toString());
+                    }
+                }
             }
         }
 
