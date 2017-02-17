@@ -115,7 +115,13 @@ public class Retriever {
                 if (isDebugMode) {
                     printResponseErrorLog("Response is null");
                 }
-                if (isCallbackExist) callback.onRetrieverError();
+                if (isCallbackExist) {
+                    try {
+                        callback.onRetrieverError();
+                    } catch (IllegalStateException e) {
+                        Log.w(LOG_TAG, e.toString());
+                    }
+                }
             } else {
                 if (isDebugMode) {
                     printResponseDebugLog(result);
