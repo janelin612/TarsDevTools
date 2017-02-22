@@ -23,17 +23,27 @@ public class NetworkChecker {
         UNAVAILABLE
     }
 
+    /**
+     * 檢查目前網路狀態
+     *
+     * @param context Context
+     * @return 回傳 {@link Status} , 當發生例外時回傳{@link Status#UNAVAILABLE}
+     */
     public static Status getStatus(Context context) {
-        ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-        if (mNetworkInfo == null) {
-            return Status.DISCONNECTED;
-        } else {
-            if (mNetworkInfo.isConnected()) {
-                return Status.CONNECTED;
+        try {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo == null) {
+                return Status.DISCONNECTED;
             } else {
-                return Status.UNAVAILABLE;
+                if (mNetworkInfo.isConnected()) {
+                    return Status.CONNECTED;
+                } else {
+                    return Status.UNAVAILABLE;
+                }
             }
+        } catch (Exception e) {
+            return Status.UNAVAILABLE;
         }
     }
 }
