@@ -24,7 +24,13 @@ public class NetworkChecker {
     }
 
     public static Status getStatus(Context context) {
-        ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager mConnectivityManager;
+        try {
+            mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+
         NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
         if (mNetworkInfo == null) {
             return Status.DISCONNECTED;
