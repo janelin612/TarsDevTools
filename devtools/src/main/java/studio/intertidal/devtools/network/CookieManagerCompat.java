@@ -6,7 +6,9 @@ import android.webkit.CookieSyncManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
-
+/**
+ * 與Cookie處理相關的物件
+ */
 public class CookieManagerCompat {
     private CookieSyncManager cookieSyncManager;
     private CookieManager cookieManager;
@@ -43,6 +45,18 @@ public class CookieManagerCompat {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && cookieSyncManager != null) {
             cookieSyncManager.sync();
         }
+    }
+
+    /**
+     * <p>從WebView內抽取Cookie並且保存起來</p>
+     * 建議於{@link android.webkit.WebViewClient#onPageFinished(WebView, String)} 執行
+     *
+     * @param webView onPageFinished的第一個參數
+     * @param url     onPageFinished的第二個參數
+     */
+    public void addCookieOnWebViewFinished(WebView webView, String url) {
+        String cookie = cookieManager.getCookie(url);
+        this.addCookie(url, cookie);
     }
 
     public void onPause() {
