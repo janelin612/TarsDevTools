@@ -3,6 +3,7 @@ package studio.intertidal.devtools;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.inputmethod.InputMethodManager;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -14,7 +15,9 @@ public class FragmentUtil {
      *
      * @param manager Activity持有的FragmentManager
      * @return 若出錯會回傳null
+     * @deprecated 似乎有問題 待debug
      */
+    @Deprecated
     public static Fragment getTopFragment(FragmentManager manager) {
         if (manager == null) return null;
 
@@ -69,8 +72,26 @@ public class FragmentUtil {
      * @param manager Activity持有的FragmentManager
      */
     public static void popBackToTop(FragmentManager manager) {
-        for (int i = 0; i < manager.getBackStackEntryCount(); ++i) {
-            manager.popBackStack();
+        int count = manager.getBackStackEntryCount();
+        for (int i = 0; i < count; ++i) {
+            clearFragmentAtSameBackStack(manager);
+            manager.popBackStackImmediate();
+        }
+    }
+
+    /**
+     * 處理同一個BackStack階段同時存在多個Fragment於畫面上的問題
+     *
+     * @param manager
+     */
+    private static void clearFragmentAtSameBackStack(FragmentManager manager) {
+        int count = manager.getFragments().size();
+        if (count > 1) {
+            FragmentTransaction transaction = manager.beginTransaction();
+            for (int i = 0; i < count; i++) {
+                transaction.remove(manager.getFragments().get(i));
+            }
+            transaction.commit();
         }
     }
 }
