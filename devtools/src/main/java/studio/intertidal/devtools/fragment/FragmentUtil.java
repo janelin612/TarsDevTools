@@ -89,4 +89,22 @@ public class FragmentUtil {
             transaction.commit();
         }
     }
+
+
+    /**
+     * 搭配{@link IBackPressed}介面使用
+     * 於{@link Activity#onBackPressed()}呼叫此方法
+     * 若畫面上的Fragment有實作該介面，則返回鍵的行為將由該畫面接管
+     *
+     * @param manager
+     * @return 是否有接管返回鍵，若該值回傳false則應該考慮呼叫原本的super.onBackPressed()
+     */
+    public boolean onActivityBackPressed(FragmentManager manager) {
+        Fragment fragment = getTopFragment(manager);
+        if (fragment != null && fragment instanceof IBackPressed) {
+            ((IBackPressed) fragment).onBackPressed();
+            return true;
+        }
+        return false;
+    }
 }
