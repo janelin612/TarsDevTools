@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TarsDevTools.iml" filepath="$PROJECT_DIR$/TarsDevTools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TarsDevTool.iml" filepath="$PROJECT_DIR$/TarsDevTool.iml" />
       <module fileurl="file://$PROJECT_DIR$/devtools/devtools.iml" filepath="$PROJECT_DIR$/devtools/devtools.iml" />
     </modules>
   </component>
