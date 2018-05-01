@@ -1,4 +1,4 @@
-package studio.intertidal.devtools;
+package studio.intertidal.devtools.fragment;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
