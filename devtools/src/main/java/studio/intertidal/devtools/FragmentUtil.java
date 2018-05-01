@@ -15,18 +15,13 @@ public class FragmentUtil {
      *
      * @param manager Activity持有的FragmentManager
      * @return 若出錯會回傳null
-     * @deprecated 似乎有問題 待debug
      */
-    @Deprecated
     public static Fragment getTopFragment(FragmentManager manager) {
         if (manager == null) return null;
 
-        try {
-            int pointer = manager.getBackStackEntryCount();
-            return manager.getFragments().get(pointer);
-        } catch (Exception e) {
-            return null;
-        }
+        int count = manager.getFragments().size();
+        if (count == 0) return null;
+        return manager.getFragments().get(0);
     }
 
     /**

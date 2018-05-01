@@ -9,6 +9,13 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class ImageLoaderUtil {
 
+    /**
+     * 取得通用的設定
+     *
+     * @param context
+     * @param cacheSize 快取大小(MB)
+     * @return
+     */
     public static ImageLoaderConfiguration getDefaultConfig(Context context, int cacheSize) {
         DisplayImageOptions myOptions = buildDefaultOptions();
         return getDefaultConfigBuilder(context)
